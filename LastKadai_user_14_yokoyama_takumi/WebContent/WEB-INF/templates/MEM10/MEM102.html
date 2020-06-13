@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>会員情報確認</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+	<div
+		th:include="MEN101::userHeader(
+		date = ${date},
+		userName = ${userName}
+	)"></div>
+
+	<p>この内容で登録しますか？</p>
+	<p>●会員情報</p>
+
+	<span th:text="${message}"></span>
+
+	<div>
+		<form th:action="@{/MEM102.html}" method="post"
+			th:object="${regFormModel}">
+
+			<table border="1">
+				<tr>
+					<th>氏名</th>
+					<td><span th:text="*{name}"></span></td>
+				</tr>
+
+				<tr>
+					<th>年齢</th>
+					<td><span th:text="*{age}"></span></td>
+				</tr>
+
+				<tr>
+					<th>性別</th>
+					<td><div th:switch="*{gender}">
+							<p th:case="M" th:text="男性"></p>
+							<p th:case="F" th:text="女性"></p>
+							<p th:case="*"></p>
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<th>郵便番号</th>
+					<td><span th:text="*{postalCode}"></span></td>
+				</tr>
+
+				<tr>
+					<th>住所</th>
+					<td><span th:text="*{addr}"></span></td>
+				</tr>
+
+				<tr>
+					<th>電話番号</th>
+					<td><span th:text="*{tel}"></span></td>
+				</tr>
+
+
+			</table>
+
+			<div>
+				<input type="submit" name="reg" value="登録">
+				<input type="submit" name="back" value="戻る">
+			</div>
+		</form>
+	</div>
+</body>
+</html>

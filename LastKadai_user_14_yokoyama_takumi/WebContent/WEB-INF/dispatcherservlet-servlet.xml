@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"  xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+		<!-- スキャンする対象controllerのパッケージ -->
+			<context:component-scan base-package="jp.co.btc.spring" />
+
+		<!-- SpringMVCの基本的な機能を有効化 -->
+		<mvc:annotation-driven />
+
+		<!-- aopにAspectJアノテーション記法を有効に -->
+		<aop:aspectj-autoproxy />
+
+		<!-- transactionManagerのbean定義(dataSourceを参照) -->
+		<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource" />
+		</bean>
+
+		<!-- transactionManager設定(アノテーションで対象を設定) -->
+		<tx:annotation-driven transaction-manager="transactionManager" />
+
+		<!-- SpringのViewResolverの設定 -->
+		<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+				<property name="templateEngine" ref="templateEngine" />
+				<property name="characterEncoding" value="utf-8" />
+		</bean>
+		<!-- viewのtemplateEngineとしてtemplateResolverを使用 -->
+		<bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
+				<property name="templateResolver" ref="templateResolver" />
+		</bean>
+
+		<!-- thymeleafを templateResolver経由してtemplateEngineで使用する設定 -->
+		<bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+				<property name="prefix" value="/WEB-INF/templates/" />
+				<property name="suffix" value=".html" />
+				<property name="templateMode" value="HTML5" />
+		</bean>
+
+	<context:property-placeholder location="classpath:resources/jdbc.properties" />
+	<jee:jndi-lookup id="dataSource" jndi-name="${jndi.datasource}"></jee:jndi-lookup>
+
+	<!-- dataSourceの定義 -->
+	<!-- JdbcTemplate -->
+	<bean class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	<!-- NamedParameterJdbcTemplate -->
+	<bean
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+</beans>

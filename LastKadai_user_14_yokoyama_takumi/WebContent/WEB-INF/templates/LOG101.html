@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ユーザーログイン</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+	<div th:include="MEN101::userHeader(
+		date = ${date},
+		userName = ${userName}
+	)"></div>
+
+	<a th:href="@{'/MEM101.html'}">新規会員の方はこちら</a>
+	<div>
+		<span th:text="${message}" class="error"></span>
+
+		<form th:action="@{/LOG101.html}" method="post"
+			th:object="${loginFormModel}">
+
+			<p>
+				会員No <input type="text" th:field="*{userNo}" /> <span
+					th:if="${#fields.hasErrors('userNo')}" th:errors="*{userNo}"
+					class="error"></span>
+			</p>
+			<p>
+				パスワード <input type="password" th:field="*{userPass}" /> <span
+					th:if="${#fields.hasErrors('userPass')}" th:errors="*{userPass}"
+					class="error"></span>
+
+				<input type="hidden" th:field="*{tranFlg}"/>
+			</p>
+			<input type="submit" name="login" value="ログイン">
+			<input type=submit name="clear" value="クリア">
+
+		</form>
+	</div>
+
+
+</body>
+</html>

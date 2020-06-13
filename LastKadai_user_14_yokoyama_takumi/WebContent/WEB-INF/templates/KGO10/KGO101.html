@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>お買い物かご</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+	<div
+		th:include="MEN101::userHeader(
+		date = ${date},
+		userName = ${userName}
+	)"></div>
+
+	<p>●商品一覧</p>
+
+	<span th:text="${message}" class="error"></span>
+
+	<form th:action="@{/KGO101.html}" method="post"
+		th:object="${addCartFormModel}">
+		<table border="1">
+			<tr>
+				<th>選択</th>
+				<th>商品コード</th>
+				<th>商品名</th>
+				<th>販売元</th>
+				<th>金額(単価)</th>
+				<th>購入数</th>
+			</tr>
+
+			<tr th:each="goods : ${goodsList}">
+
+				<td><input type="checkbox" th:field="*{checkGoods}"
+					th:value="${goods.code}" /></td>
+
+				<td th:text="${goods.code}"></td>
+
+				<td th:text="${goods.name}"></td>
+
+				<td th:text="${goods.maker}"></td>
+
+				<td th:text="${goods.price}" align="right"></td>
+
+				<td><input type="text" name="count" th:value="${goods.count}" /> <input
+					type="hidden" name="code" th:value="${goods.code}" /></td>
+			</tr>
+		</table>
+
+		<input type="submit" name="del" value="取り消し"> <input
+			type="submit" name="cancel" value="買い物をやめる"> <input type=submit
+			name="order" value="注文する">
+			<input type=submit name="menu" value="メニューへ">
+
+
+	</form>
+
+
+
+</body>
+</html>

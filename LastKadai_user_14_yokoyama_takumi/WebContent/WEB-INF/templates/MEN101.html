@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ユーザーメニュー</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+	<div id="header" th:fragment="userHeader(date,userName)">
+		<p>
+			<span class="text-left">オンラインショッピングサイト</span>
+		</p>
+		<span th:text="${date}"></span> <span th:inline="text">「[[${userName}]]」さん</span>
+		<hr>
+	</div>
+
+	<div th:unless="${loginCheck}">
+	<a th:href="@{'/MEM101.html'}">新規会員登録</a>
+	<span>会員情報の登録を行います。</span>
+	<br>
+	</div>
+
+	<a th:href="@{'/MEM201.html'}">会員情報変更・削除</a>
+	<span>会員情報の変更・削除を行います。</span>
+	<br>
+
+	<a th:href="@{'/SHO101.html'}">商品検索</a>
+	<span>購入する商品の検索を行います。</span>
+	<br>
+
+	<a th:href="@{'/KGO101.html'}">お買い物かご</a>
+	<span>商品の注文を行います。</span>
+	<br>
+
+	<div th:if="${loginCheck}">
+		<form th:action="@{/LOG101.html}" method="post">
+		<input type="submit" name="logout" value="ログアウト">
+		</form>
+	</div>
+
+	<div th:unless="${loginCheck}">
+		<form th:action="@{LOG101.html}">
+		<input type="submit" th:value="ログイン">
+		</form>
+	</div>
+
+
+
+
+</body>
+</html>

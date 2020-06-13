@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>商品登録結果</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+	<div
+		th:include="MEN101::userHeader(
+		date = ${date},
+		userName = ${userName}
+	)"></div>
+
+
+	<p>以下の商品がお買い物かごに登録されています。</p>
+
+	<p>●商品一覧</p>
+
+	<span th:text="${message}" class="error"></span>
+
+
+	<table border="1">
+		<tr>
+
+			<th>商品コード</th>
+			<th>商品名</th>
+			<th>販売元</th>
+			<th>価格</th>
+			<th>購入数</th>
+		</tr>
+
+		<tr th:each="goods : ${goodsList}">
+
+
+
+			<td th:text="${goods.code}"></td>
+
+			<td th:text="${goods.name}"></td>
+
+
+			<td th:text="${goods.maker}"></td>
+
+			<td th:text="${goods.price}" align="right"></td>
+
+			<td th:text="${goods.count}"></td>
+
+		</tr>
+	</table>
+
+	<form th:action="@{/SHO104.html}" method="post">
+
+		<input type="submit" name="cart" value="お買い物かご">
+		<input type="submit" name="back" value="戻る">
+	</form>
+
+
+
+</body>
+</html>

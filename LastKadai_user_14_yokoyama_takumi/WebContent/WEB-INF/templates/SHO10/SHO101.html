@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>商品検索</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+	<div
+		th:include="MEN101::userHeader(
+		date = ${date},
+		userName = ${userName}
+	)"></div>
+
+	<p>検索条件を入力してください。</p>
+
+	<span th:text="${message}" class="error"></span>
+
+	<div>
+		<form th:action="@{/SHO101.html}" method="post"
+			th:object="${searchGoodsModel}">
+
+			<span th:if="${#fields.hasErrors('minP')}" th:errors="*{minP}"
+				class="error"></span> <span th:if="${#fields.hasErrors('maxP')}"
+				th:errors="*{maxP}" class="error"></span> <span
+				th:if="${#fields.hasErrors('priceCheck')}" th:errors="*{priceCheck}"
+				class="error"></span> <span
+				th:if="${#fields.hasErrors('maxPOver0')}" th:errors="*{maxPOver0}"
+				class="error"></span> <span
+				th:if="${#fields.hasErrors('minPOver0')}" th:errors="*{minPOver0}"
+				class="error"></span>
+
+
+			<table border="1">
+				<tr>
+					<th>カテゴリ</th>
+					<td><select th:field="*{category}">
+							<option th:each="category : ${categoryList}"
+								th:value="${category.id}" th:text="${category.name}"></option>
+					</select></td>
+				</tr>
+
+				<tr>
+					<th>商品名</th>
+					<td><input type="text" th:field="*{name}" size="20" /></td>
+				</tr>
+
+				<tr>
+					<th>販売元</th>
+					<td><input type="text" th:field="*{maker}" size="20" /></td>
+				</tr>
+
+				<tr>
+					<th>金額上限</th>
+					<td><input type="text" th:field="*{maxP}" size="20" /></td>
+				</tr>
+
+				<tr>
+					<th>金額下限</th>
+					<td><input type="text" th:field="*{minP}" size="20" /></td>
+				</tr>
+
+			</table>
+
+			<div>
+				<input type="submit" name="search" value="検索"> <input
+					type="submit" name="back" value="戻る"> <input type=submit
+					name="clear" value="クリア">
+			</div>
+		</form>
+	</div>
+
+	<div th:if="${goodsList}!= null">
+		<p>●商品一覧</p>
+
+		<table border=0>
+			<tr>
+				<td>
+					<form th:action="@{/SHO101/page.html}" method="post"
+						th:object="${paginationModel}">
+						<input th:if="*{startPage}!=null" type="submit" value="&lt;&lt;" />
+						<input th:if="*{startPage}==null" type="submit" value="&lt;&lt;"
+							disabled="disabled" /> <input type="hidden" name="pageNum"
+							th:value="*{startPage}" />
+					</form>
+				</td>
+
+				<td>
+					<form th:action="@{/SHO101/page.html}" method="post"
+						th:object="${paginationModel}">
+						<input th:if="*{pastPage}!=null" type="submit" value="&lt;" /> <input
+							th:if="*{pastPage}==null" type="submit" value="&lt;"
+							disabled="disabled" /> <input type="hidden" name="pageNum"
+							th:value="*{pastPage}" />
+					</form>
+				</td>
+				<td><span th:object="${paginationModel}">[<span
+						th:text="*{page}"></span>/<span th:text="*{maxPage}"></span>]
+				</span></td>
+				<td>
+					<form th:action="@{/SHO101/page.html}" method="post"
+						th:object="${paginationModel}">
+						<input th:if="*{nextPage}!=null" type="submit" value="&gt;" /> <input
+							th:if="*{nextPage}==null" type="submit" value="&gt;"
+							disabled="disabled" /> <input type="hidden" name="pageNum"
+							th:value="*{nextPage}" />
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/SHO101/page.html}" method="post"
+						th:object="${paginationModel}">
+						<input th:if="*{lastPage}!=null" type="submit" value="&gt;&gt;" />
+						<input th:if="*{lastPage}==null" type="submit" value="&gt;&gt;"
+							disabled="disabled" /> <input type="hidden" name="pageNum"
+							th:value="*{lastPage}" />
+					</form>
+				</td>
+			</tr>
+		</table>
+
+		<form th:action="@{/SHO103.html}" method="post"
+			th:object="${addCartFormModel}">
+			<table border="1">
+				<tr>
+					<th>選択</th>
+					<th>商品コード</th>
+					<th>商品名</th>
+					<th>販売元</th>
+					<th>金額(単価)</th>
+					<th>メモ</th>
+					<th>購入数</th>
+				</tr>
+
+				<tr th:each="goods : ${goodsList}">
+
+					<td><input type="checkbox" th:field="*{checkGoods}"
+						th:value="${goods.code}" /></td>
+
+					<td th:text="${goods.code}"></td>
+
+					<td><a th:href="@{'SHO102.html?code='+${goods.code}}"
+						th:text="${goods.name}"></a></td>
+
+					<td th:text="${goods.maker}"></td>
+
+					<td th:text="${goods.price}" align="right"></td>
+
+					<td th:text="${goods.memo20}"></td>
+
+					<td><input type="text" name="count" value="" /> <input
+						type="hidden" name="code" th:value="${goods.code}" /></td>
+				</tr>
+			</table>
+
+			<input type="submit" value="お買い物かごへ入れる" />
+
+		</form>
+	</div>
+
+
+</body>
+</html>
